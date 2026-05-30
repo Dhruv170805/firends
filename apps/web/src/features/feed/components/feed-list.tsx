@@ -46,7 +46,7 @@ export function FeedList() {
 
   const { data: searchResults, isLoading: isSearchLoading } = useQuery<Post[]>({
     queryKey: ['search', debouncedSearchQuery],
-    queryFn: () => apiFetch(`/posts/search?q=${debouncedSearchQuery}`),
+    queryFn: () => apiFetch(`/posts/search?q=${encodeURIComponent(debouncedSearchQuery)}`),
     enabled: !!debouncedSearchQuery,
   });
 

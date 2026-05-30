@@ -111,18 +111,22 @@ export default function LoginPage() {
       // 2. Upload avatar if selected (and we have active session/identity)
       let avatarUrl = '';
       if (avatarFile && data.user) {
-        try {
-          avatarUrl = await uploadAvatar(avatarFile, data.user.id);
-          
-          // Update the public.users record with the avatar URL
-          // If auto-confirm is on, we can write immediately.
-          await supabase
-            .from('users')
-            .update({ avatar_url: avatarUrl })
-            .eq('id', data.user.id);
-        } catch (uploadErr) {
-          console.error('Avatar upload failed but account was created:', uploadErr);
-          toast.warning('Account created, but avatar upload failed.');
+        if (data.session) {
+          try {
+            avatarUrl = await uploadAvatar(avatarFile, data.user.id);
+            
+            // Update the public.users record with the avatar URL
+            await supabase
+              .from('users')
+              .update({ avatar_url: avatarUrl })
+              .eq('id', data.user.id);
+          } catch (uploadErr) {
+            console.error('Avatar upload failed but account was created:', uploadErr);
+            toast.warning('Account created, but avatar upload failed.');
+          }
+        } else {
+          console.log('Avatar upload deferred until email verification.');
+          // We can't upload to storage without an active session. The user can upload it later via their Profile.
         }
       }
 

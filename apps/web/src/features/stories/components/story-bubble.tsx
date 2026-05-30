@@ -203,6 +203,7 @@ export function StoryBubbleList() {
                   ref={fileInputRef}
                   className="hidden"
                   accept="image/*"
+                  disabled={uploading || createStoryMutation.isPending}
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
@@ -213,6 +214,7 @@ export function StoryBubbleList() {
                       };
                       reader.readAsDataURL(file);
                     }
+                    if (fileInputRef.current) fileInputRef.current.value = '';
                   }}
                 />
               </div>

@@ -55,50 +55,52 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       }
 
       // Establish Realtime Notification Listener
-      notificationChannel = supabase
-        .channel(`user-notifications-${session.user.id}`)
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'notifications',
-            filter: `recipient_id=eq.${session.user.id}`,
-          },
-          async (payload) => {
-            try {
-              const { data: sender } = await supabase
-                .from('users')
-                .select('username')
-                .eq('id', payload.new.sender_id)
-                .single();
+      if (active) {
+        notificationChannel = supabase
+          .channel(`user-notifications-${session.user.id}`)
+          .on(
+            'postgres_changes',
+            {
+              event: 'INSERT',
+              schema: 'public',
+              table: 'notifications',
+              filter: `recipient_id=eq.${session.user.id}`,
+            },
+            async (payload) => {
+              try {
+                const { data: sender } = await supabase
+                  .from('users')
+                  .select('username')
+                  .eq('id', payload.new.sender_id)
+                  .single();
 
-              const senderName = sender?.username ? `@${sender.username}` : 'Someone';
-              let msg = '';
-              if (payload.new.type === 'like') {
-                msg = `${senderName} liked your memory.`;
-              } else if (payload.new.type === 'comment') {
-                msg = `${senderName} commented on your memory.`;
-              } else if (payload.new.type === 'follow') {
-                msg = `${senderName} started following you.`;
-              } else {
-                msg = `New interaction from ${senderName}.`;
+                const senderName = sender?.username ? `@${sender.username}` : 'Someone';
+                let msg = '';
+                if (payload.new.type === 'like') {
+                  msg = `${senderName} liked your memory.`;
+                } else if (payload.new.type === 'comment') {
+                  msg = `${senderName} commented on your memory.`;
+                } else if (payload.new.type === 'follow') {
+                  msg = `${senderName} started following you.`;
+                } else {
+                  msg = `New interaction from ${senderName}.`;
+                }
+
+                toast.info(msg, {
+                  icon: '🔔',
+                  duration: 5000,
+                });
+              } catch (err) {
+                console.error('Failed to parse incoming notification:', err);
+                toast.info('New interaction notification received.', {
+                  icon: '🔔',
+                  duration: 5000,
+                });
               }
-
-              toast.info(msg, {
-                icon: '🔔',
-                duration: 5000,
-              });
-            } catch (err) {
-              console.error('Failed to parse incoming notification:', err);
-              toast.info('New interaction notification received.', {
-                icon: '🔔',
-                duration: 5000,
-              });
             }
-          }
-        )
-        .subscribe();
+          )
+          .subscribe();
+      }
     };
 
     initializeLayout();

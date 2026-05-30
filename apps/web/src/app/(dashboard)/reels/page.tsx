@@ -68,9 +68,17 @@ const ReelItem = ({ post }: { post: Post }) => {
                 ? "bg-cyber-pink text-white border-cyber-pink neon-glow-pink scale-110" 
                 : "bg-white/10 text-white border-white/20 hover:bg-white/20"
             )}
-            onClick={() => {
+            onClick={async () => {
+              const previousIsLiked = isLiked;
+              const previousLikesCount = likesCount;
               setIsLiked(!isLiked);
               setLikesCount((prev: number) => isLiked ? prev - 1 : prev + 1);
+              try {
+                await apiFetch(`/interactions/like/${post.id}`, { method: 'POST' });
+              } catch (error) {
+                setIsLiked(previousIsLiked);
+                setLikesCount(previousLikesCount);
+              }
             }}
           >
             <Heart size={32} className={isLiked ? "fill-current" : ""} />
