@@ -60,13 +60,17 @@ export class PostsService {
 
   async search(query: string, userId?: string) {
     const client = this.supabaseService.getClient();
+    
+    // Sanitize query to prevent PostgREST syntax injection
+    const sanitizedQuery = query.replace(/[%,"]/g, '').trim();
+    
     const { data, error } = await client
       .from('posts')
       .select(
         '*, user:users(*), media:post_media(*), likes(count), comments(count)',
       )
       .is('sector_id', null)
-      .or(`caption.ilike.%${query}%,location.ilike.%${query}%`)
+      .or(`caption.ilike.%${sanitizedQuery}%,location.ilike.%${sanitizedQuery}%`)
       .order('created_at', { ascending: false })
       .limit(20);
 

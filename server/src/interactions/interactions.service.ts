@@ -30,63 +30,45 @@ export class InteractionsService {
       throw new NotFoundException(`Post with ID ${postId} not found`);
     }
 
-    // Check if like exists (use maybeSingle to prevent PGRST116 no-rows error)
-    const { data: existingLike, error: likeCheckError } = await client
+    // Try to insert the like first
+    const { error: insertError } = await client
       .from('likes')
-      .select('id')
-      .match({ user_id: userId, post_id: postId })
-      .maybeSingle();
+      .insert({ user_id: userId, post_id: postId });
 
-    if (likeCheckError) {
-      this.logger.error(`Error checking like state: ${likeCheckError.message}`);
-      throw new BadRequestException(
-        `Failed to toggle like: ${likeCheckError.message}`,
+    if (insertError) {
+      if (insertError.code === '23505') {
+        // Unique violation means it already exists, so we unlike it
+        const { error: deleteError } = await client
+          .from('likes')
+          .delete()
+          .match({ user_id: userId, post_id: postId });
+
+        if (deleteError) {
+          this.logger.error(`Error removing like: ${deleteError.message}`);
+          throw new BadRequestException('Failed to remove like');
+        }
+        return { liked: false };
+      } else {
+        this.logger.error(`Error adding like: ${insertError.message}`);
+        throw new BadRequestException('Failed to toggle like');
+      }
+    }
+
+    // If insert succeeded, we notify and return true
+    try {
+      await this.notificationsService.createNotification(
+        post.user_id,
+        userId,
+        'like',
+        postId,
+      );
+    } catch (notifyErr) {
+      this.logger.warn(
+        `Failed to create notification for like: ${notifyErr.message}`,
       );
     }
 
-    if (existingLike) {
-      // Unlike
-      const { error: deleteError } = await client
-        .from('likes')
-        .delete()
-        .match({ user_id: userId, post_id: postId });
-
-      if (deleteError) {
-        this.logger.error(`Error removing like: ${deleteError.message}`);
-        throw new BadRequestException(
-          `Failed to remove like: ${deleteError.message}`,
-        );
-      }
-      return { liked: false };
-    } else {
-      // Like
-      const { error: insertError } = await client
-        .from('likes')
-        .insert({ user_id: userId, post_id: postId });
-
-      if (insertError) {
-        this.logger.error(`Error adding like: ${insertError.message}`);
-        throw new BadRequestException(
-          `Failed to add like: ${insertError.message}`,
-        );
-      }
-
-      // Log notification (fail silently so it doesn't block main operation)
-      try {
-        await this.notificationsService.createNotification(
-          post.user_id,
-          userId,
-          'like',
-          postId,
-        );
-      } catch (notifyErr) {
-        this.logger.warn(
-          `Failed to create notification for like: ${notifyErr.message}`,
-        );
-      }
-
-      return { liked: true };
-    }
+    return { liked: true };
   }
 
   async addComment(userId: string, postId: string, content: string) {
@@ -153,7 +135,8 @@ export class InteractionsService {
       .from('comments')
       .select('*, user:users(*)')
       .match({ post_id: postId })
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true })
+      .limit(50);
 
     if (error) {
       this.logger.error(`Error fetching comments: ${error.message}`);

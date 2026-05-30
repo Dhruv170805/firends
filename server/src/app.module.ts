@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SupabaseModule } from './supabase/supabase.module';
@@ -19,6 +21,10 @@ import { SectorsModule } from './sectors/sectors.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ThrottlerModule.forRoot([{
+      ttl: 60000,
+      limit: 100,
+    }]),
     SupabaseModule,
     AuthModule,
     PostsModule,
@@ -30,6 +36,13 @@ import { SectorsModule } from './sectors/sectors.module';
     SectorsModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService, HealthService],
+  providers: [
+    AppService,
+    HealthService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

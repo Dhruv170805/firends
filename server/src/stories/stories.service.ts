@@ -52,21 +52,28 @@ export class StoriesService {
       ...(followingData?.map((f: any) => f.following_id) || []),
     ];
 
-    // 2. Fetch all active stories for these users (including creator profiles)
-    const { data: storiesData, error: storiesError } = await client
-      .from('stories')
-      .select('*, user:users(*)')
-      .in('user_id', targetUserIds)
-      .gt('expires_at', new Date().toISOString())
-      .order('created_at', { ascending: true });
+    let storiesData: any[] = [];
+    const CHUNK_SIZE = 200;
 
-    if (storiesError) {
-      this.logger.error(
-        `Error getting active stories: ${storiesError.message}`,
-      );
-      throw new BadRequestException(
-        `Failed to fetch active stories: ${storiesError.message}`,
-      );
+    for (let i = 0; i < targetUserIds.length; i += CHUNK_SIZE) {
+      const chunk = targetUserIds.slice(i, i + CHUNK_SIZE);
+      const { data, error } = await client
+        .from('stories')
+        .select('*, user:users(*)')
+        .in('user_id', chunk)
+        .gt('expires_at', new Date().toISOString())
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        this.logger.error(`Error getting active stories: ${error.message}`);
+        throw new BadRequestException(
+          `Failed to fetch active stories: ${error.message}`,
+        );
+      }
+      
+      if (data) {
+        storiesData = storiesData.concat(data);
+      }
     }
 
     // 3. Group stories by user (matching Snapchat/Instagram structures)

@@ -85,7 +85,7 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
             </div>
             <div>
               <h3 className="font-black text-white text-xl tracking-tight leading-none group-hover:cyber-gradient-text transition-all">
-                {post.user?.username || 'Memory Maker'}
+                {post.user?.username || 'Post Creator'}
               </h3>
               {post.location && (
                 <div className="flex items-center gap-1.5 text-[11px] text-gray-300 font-black uppercase tracking-widest mt-2">
@@ -108,7 +108,7 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
           <div className="rounded-[2.5rem] overflow-hidden mb-8 bg-white/5 aspect-[16/10] relative group/media border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] memory-glow">
             <img 
               src={post.media[0].media_url} 
-              alt="Memory Node"
+              alt="Post Image"
               className="w-full h-full object-cover group-hover/media:scale-110 transition-transform duration-[2000ms] ease-out"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark/80 via-transparent to-transparent opacity-70" />

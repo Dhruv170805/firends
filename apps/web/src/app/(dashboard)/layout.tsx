@@ -149,46 +149,43 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Top Header - Cyber Branding */}
       <header className="sticky top-0 z-40 bg-cyber-dark/60 backdrop-blur-3xl border-b border-white/5 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3 relative">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyber-purple via-cyber-pink to-orange-500 flex items-center justify-center shadow-lg neon-glow-purple">
-            <Library size={20} className="text-white" />
-          </div>
           <button 
             onClick={() => setIsGroupDropdownOpen(!isGroupDropdownOpen)}
-            className="flex items-center gap-1.5 text-left cursor-pointer group"
+            className="flex items-center gap-2 text-left cursor-pointer group active:scale-95 transition-transform"
           >
-            <div className="flex flex-col">
-              <h1 className="text-xl font-black tracking-tighter text-white leading-none group-hover:text-cyber-purple transition-colors">
-                {activeGroup ? activeGroup.name : 'Public Feed'}
-              </h1>
-              <span className="text-[11px] font-black cyber-gradient-text uppercase tracking-[0.2em] mt-1">
-                {activeGroup ? 'Group Feed' : 'LegacyLoop'}
-              </span>
-            </div>
-            <ChevronDown size={16} className="text-gray-400 group-hover:text-white transition-colors" />
+            <h1 className="text-xl md:text-2xl font-black tracking-tight text-white flex items-center gap-1.5">
+              {activeGroup ? activeGroup.name : 'Public Feed'}
+              <ChevronDown size={20} className={cn(
+                "text-gray-400 transition-transform duration-300", 
+                isGroupDropdownOpen ? "rotate-180" : "rotate-0"
+              )} />
+            </h1>
           </button>
 
           {isGroupDropdownOpen && (
             <>
               <div className="fixed inset-0 z-45" onClick={() => setIsGroupDropdownOpen(false)} />
-              <div className="absolute left-0 top-14 w-72 bg-cyber-dark/95 backdrop-blur-3xl rounded-[2rem] border border-white/10 shadow-[0_15px_50px_rgba(0,0,0,0.85)] z-50 overflow-hidden py-4 animate-fade-in">
-                <div className="px-6 py-2 border-b border-white/5 flex justify-between items-center mb-2">
-                  <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Switch Group</span>
-                </div>
+              <div className="absolute left-0 top-10 w-64 bg-[#1C1B19]/95 backdrop-blur-3xl rounded-3xl border border-white/5 shadow-2xl z-50 overflow-hidden py-2 animate-fade-in origin-top-left">
                 
-                <div className="divide-y divide-white/5 max-h-[300px] overflow-y-auto scrollbar-hide">
+                <div className="max-h-[350px] overflow-y-auto scrollbar-hide">
                   <button
                     type="button"
                     onClick={() => {
                       changeGroup(null);
                       setIsGroupDropdownOpen(false);
                     }}
-                    className={cn(
-                      "w-full text-left px-6 py-4 text-sm font-black transition-all flex items-center justify-between cursor-pointer",
-                      !activeGroup ? "text-cyber-purple bg-white/5" : "text-gray-400 hover:text-white hover:bg-white/5"
-                    )}
+                    className="w-full text-left px-5 py-3.5 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors group"
                   >
-                    <span>Public Feed</span>
-                    {!activeGroup && <div className="w-2.5 h-2.5 rounded-full bg-cyber-purple shadow-[0_0_10px_#A855F7]" />}
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-cyber-purple to-cyber-pink flex items-center justify-center border border-white/10">
+                        <Users size={18} className="text-[#111718]" />
+                      </div>
+                      <span className={cn(
+                        "text-sm font-semibold",
+                        !activeGroup ? "text-white" : "text-gray-400 group-hover:text-white"
+                      )}>Public Feed</span>
+                    </div>
+                    {!activeGroup && <div className="w-2 h-2 rounded-full bg-cyber-purple" />}
                   </button>
                   
                   {groups.map((group) => {
@@ -201,16 +198,34 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                           changeGroup({ id: group.id, name: group.name });
                           setIsGroupDropdownOpen(false);
                         }}
-                        className={cn(
-                          "w-full text-left px-6 py-4 text-sm font-black transition-all flex items-center justify-between cursor-pointer",
-                          isSelected ? "text-cyber-purple bg-white/5" : "text-gray-400 hover:text-white hover:bg-white/5"
-                        )}
+                        className="w-full text-left px-5 py-3.5 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-colors group"
                       >
-                        <span className="truncate pr-4">{group.name}</span>
-                        {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-cyber-purple shadow-[0_0_10px_#A855F7]" />}
+                        <div className="flex items-center gap-3 overflow-hidden">
+                          <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 flex-shrink-0 text-gray-300 font-bold uppercase">
+                            {group.name.substring(0, 1)}
+                          </div>
+                          <span className={cn(
+                            "text-sm font-semibold truncate",
+                            isSelected ? "text-white" : "text-gray-400 group-hover:text-white"
+                          )}>{group.name}</span>
+                        </div>
+                        {isSelected && <div className="w-2 h-2 rounded-full bg-cyber-purple flex-shrink-0 ml-2" />}
                       </button>
                     );
                   })}
+                </div>
+                
+                <div className="border-t border-white/5 mt-1 pt-1">
+                  <Link 
+                    href="/sectors" 
+                    onClick={() => setIsGroupDropdownOpen(false)}
+                    className="w-full text-left px-5 py-4 flex items-center gap-3 cursor-pointer hover:bg-white/5 transition-colors group"
+                  >
+                    <div className="w-10 h-10 rounded-full border border-dashed border-gray-500 flex items-center justify-center group-hover:border-white transition-colors">
+                      <PlusSquare size={18} className="text-gray-400 group-hover:text-white transition-colors" />
+                    </div>
+                    <span className="text-sm font-semibold text-gray-400 group-hover:text-white transition-colors">Manage Groups</span>
+                  </Link>
                 </div>
               </div>
             </>
@@ -280,11 +295,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/profile" className="flex-1 flex flex-col items-center justify-center group gap-1.5">
           <div className={cn(
             "p-2.5 rounded-2xl transition-all duration-300",
-            pathname === '/profile' ? "bg-cyber-pink/20 text-cyber-pink neon-glow-pink" : "text-gray-400 group-hover:text-white"
+            pathname === '/profile' ? "bg-cyber-purple/20 text-cyber-purple neon-glow-purple" : "text-gray-400 group-hover:text-white"
           )}>
-            <Library size={26} strokeWidth={pathname === '/profile' ? 2.5 : 2} />
+            <User size={26} strokeWidth={pathname === '/profile' ? 2.5 : 2} />
           </div>
-          <span className={cn("text-[11px] font-black tracking-widest uppercase", pathname === '/profile' ? "text-cyber-pink" : "text-gray-400")}>Profile</span>
+          <span className={cn("text-[11px] font-black tracking-widest uppercase", pathname === '/profile' ? "text-cyber-purple" : "text-gray-400")}>Profile</span>
         </Link>
         
         <button 

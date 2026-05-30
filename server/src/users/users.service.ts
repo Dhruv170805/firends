@@ -90,11 +90,13 @@ export class UsersService {
       );
     }
 
-    // 2. Nights Logged (Posts created between 9 PM and 6 AM)
+    // 2. Nights Logged (Posts created between 9 PM and 6 AM, bounded to last 1000 for safety)
     const { data: timeData, error: timeError } = await client
       .from('posts')
       .select('created_at')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1000);
 
     if (timeError) {
       this.logger.error(`Error fetching post timestamps: ${timeError.message}`);
@@ -113,29 +115,28 @@ export class UsersService {
       }
     }
 
-    // 3. Timeline Flow (Sum of likes + comments across all user's posts)
-    const { data: interactionData, error: interactionError } = await client
-      .from('posts')
-      .select('id, likes(count), comments(count)')
-      .eq('user_id', userId);
+    // 3. Timeline Flow (Sum of likes + comments on user's posts via count)
+    const { count: likesCount, error: likesError } = await client
+      .from('likes')
+      .select('posts!inner(user_id)', { count: 'exact', head: true })
+      .eq('posts.user_id', userId);
 
-    if (interactionError) {
-      this.logger.error(
-        `Error fetching post interactions: ${interactionError.message}`,
-      );
-      throw new BadRequestException(
-        `Failed to retrieve stats: ${interactionError.message}`,
-      );
+    if (likesError) {
+      this.logger.error(`Error counting likes: ${likesError.message}`);
+      throw new BadRequestException(`Failed to retrieve stats: ${likesError.message}`);
     }
 
-    let timelineFlow = 0;
-    if (interactionData) {
-      for (const post of interactionData) {
-        const lCount = (post.likes as any)?.[0]?.count || 0;
-        const cCount = (post.comments as any)?.[0]?.count || 0;
-        timelineFlow += lCount + cCount;
-      }
+    const { count: commentsCount, error: commentsError } = await client
+      .from('comments')
+      .select('posts!inner(user_id)', { count: 'exact', head: true })
+      .eq('posts.user_id', userId);
+
+    if (commentsError) {
+      this.logger.error(`Error counting comments: ${commentsError.message}`);
+      throw new BadRequestException(`Failed to retrieve stats: ${commentsError.message}`);
     }
+
+    const timelineFlow = (likesCount || 0) + (commentsCount || 0);
 
     // 4. Milestones (Posts with spatial coordinates / location)
     const { count: milestones, error: milestonesError } = await client

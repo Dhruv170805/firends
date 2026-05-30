@@ -63,7 +63,7 @@ export function FeedList() {
             </div>
           </div>
           <h2 className="text-7xl md:text-8xl font-black text-white tracking-tighter leading-none">
-            Memory<br/><span className="cyber-gradient-text">Feed</span>
+            Post<br/><span className="cyber-gradient-text">Feed</span>
           </h2>
         </div>
         

@@ -17,39 +17,18 @@ export class SectorsService {
   async createSector(userId: string, createSectorDto: CreateSectorDto) {
     const client = this.supabaseService.getClient();
 
-    // 1. Create the Sector
+    // 1. Create the Sector & Leader via atomic RPC
     const { data: sector, error: sectorError } = await client
-      .from('sectors')
-      .insert({
-        name: createSectorDto.name,
-        description: createSectorDto.description,
-        created_by: userId,
-      })
-      .select()
-      .single();
+      .rpc('create_sector_with_leader', {
+        p_name: createSectorDto.name,
+        p_description: createSectorDto.description,
+        p_created_by: userId,
+      });
 
     if (sectorError || !sector) {
       this.logger.error(`Error creating sector: ${sectorError?.message}`);
       throw new BadRequestException(
         `Failed to create sector: ${sectorError?.message}`,
-      );
-    }
-
-    // 2. Add the creator as the Leader
-    const { error: memberError } = await client.from('sector_members').insert({
-      sector_id: sector.id,
-      user_id: userId,
-      role: 'leader',
-    });
-
-    if (memberError) {
-      this.logger.error(
-        `Error adding creator to sector members: ${memberError.message}`,
-      );
-      // Clean up the created sector if member insertion fails
-      await client.from('sectors').delete().eq('id', sector.id);
-      throw new BadRequestException(
-        `Failed to set up sector membership: ${memberError.message}`,
       );
     }
 
@@ -128,7 +107,7 @@ export class SectorsService {
         );
       }
       throw new BadRequestException(
-        `Failed to add member: ${insertError.message}`,
+        'Failed to add member to the sector.',
       );
     }
 
@@ -269,7 +248,7 @@ export class SectorsService {
         );
       }
       throw new BadRequestException(
-        `Failed to join sector: ${insertError.message}`,
+        'Failed to join sector.',
       );
     }
 

@@ -107,11 +107,12 @@ export default function CreatePostPage() {
         }),
       });
       
-      toast.success('Memory archived in your timeline!');
+      toast.success('Post archived in your timeline!');
       queryClient.invalidateQueries({ queryKey: ['feed'] });
       router.push('/');
     } catch (err: any) {
-      toast.error(err.message || 'Failed to archive memory');
+      console.error('Error creating post:', err);
+      toast.error(err.message || 'Failed to archive post');
       setError(err.message);
     } finally {
       setLoading(false);
@@ -125,7 +126,7 @@ export default function CreatePostPage() {
           <Camera className="text-cyber-purple drop-shadow-lg" size={32} />
           <h2 className="text-5xl font-black text-white tracking-tighter">Create Post</h2>
         </div>
-        <p className="text-gray-300 font-bold text-lg tracking-tight">Share a new memory to your college timeline.</p>
+        <p className="text-gray-300 font-bold text-lg tracking-tight">Share a new post to your college timeline.</p>
       </header>
 
       <div className="cyber-glass rounded-[3rem] overflow-hidden neon-border shadow-2xl">
@@ -185,7 +186,7 @@ export default function CreatePostPage() {
                 rows={4}
                 required
                 className="block w-full rounded-3xl border border-white/15 bg-white/5 px-8 py-6 text-white placeholder-gray-500 focus:border-cyber-purple focus:ring-2 focus:ring-cyber-purple/20 sm:text-xl font-semibold transition-all shadow-inner outline-none"
-                placeholder="Write about this memory..."
+                placeholder="Write about this post..."
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
               />

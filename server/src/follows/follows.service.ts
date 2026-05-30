@@ -81,7 +81,8 @@ export class FollowsService {
     const { data, error } = await client
       .from('follows')
       .select('follower:users(*)')
-      .eq('following_id', userId);
+      .eq('following_id', userId)
+      .limit(50);
 
     if (error) {
       this.logger.error(`Error fetching followers: ${error.message}`);
@@ -98,7 +99,8 @@ export class FollowsService {
     const { data, error } = await client
       .from('follows')
       .select('following:users(*)')
-      .eq('follower_id', userId);
+      .eq('follower_id', userId)
+      .limit(50);
 
     if (error) {
       this.logger.error(`Error fetching following list: ${error.message}`);
