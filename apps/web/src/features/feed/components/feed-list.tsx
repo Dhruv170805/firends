@@ -95,7 +95,7 @@ export function FeedList() {
           <TimelineSkeleton />
         </div>
       ) : posts.length === 0 ? (
-        <div className="cyber-glass rounded-[4rem] p-32 text-center neon-border">
+        <div className="cyber-glass rounded-[4rem] p-10 md:p-16 text-center neon-border">
           <div className="w-28 h-28 bg-white/10 rounded-[2.5rem] flex items-center justify-center mx-auto mb-10 shadow-inner border border-white/20">
             <Search size={48} className="text-gray-600" />
           </div>

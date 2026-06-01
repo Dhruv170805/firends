@@ -454,7 +454,7 @@ export default function SectorsPage() {
               </CyberCard>
             </div>
           ) : (
-            <div className="cyber-glass rounded-[4rem] p-32 text-center neon-border flex flex-col items-center justify-center min-h-[50vh]">
+            <div className="cyber-glass rounded-[4rem] p-10 md:p-16 text-center neon-border flex flex-col items-center justify-center min-h-[50vh]">
               <div className="w-28 h-28 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mb-8 shadow-inner">
                 <Lock className="text-gray-600" size={44} />
               </div>

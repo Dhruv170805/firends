@@ -4,6 +4,7 @@ import {
   Get,
   Body,
   Param,
+  Query,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -46,7 +47,12 @@ export class InteractionsController {
   }
 
   @Get('comments/:postId')
-  async getComments(@Param('postId') postId: string) {
-    return this.interactionsService.getComments(postId);
+  async getComments(
+    @Param('postId') postId: string,
+    @Query('limit') limit?: string,
+    @Query('cursor') cursor?: string,
+  ) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 50;
+    return this.interactionsService.getComments(postId, parsedLimit, cursor);
   }
 }

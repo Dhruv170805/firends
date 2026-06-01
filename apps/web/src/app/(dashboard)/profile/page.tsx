@@ -9,10 +9,10 @@ import { apiFetch } from '@/lib/api';
 import { toast } from 'sonner';
 
 const StatCard = ({ label, value, sublabel }: { label: string, value: string, sublabel: string }) => (
-  <div className="cyber-glass p-8 rounded-[2.5rem] neon-border flex flex-col items-center text-center group hover:scale-105 transition-transform duration-500">
-    <span className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-3 opacity-80">{label}</span>
-    <span className="text-4xl font-black text-white tracking-tighter mb-1.5 cyber-gradient-text">{value}</span>
-    <span className="text-[11px] font-bold text-gray-300 uppercase tracking-widest">{sublabel}</span>
+  <div className="cyber-glass p-6 md:p-8 rounded-[2.5rem] neon-border flex flex-col items-center text-center group hover:scale-105 transition-transform duration-500 w-full overflow-hidden">
+    <span className="text-[9px] md:text-[11px] font-black text-white uppercase tracking-[0.2em] md:tracking-[0.4em] mb-3 opacity-80 truncate w-full">{label}</span>
+    <span className="text-3xl md:text-4xl font-black text-white tracking-tighter mb-1.5 cyber-gradient-text">{value}</span>
+    <span className="text-[9px] md:text-[11px] font-bold text-gray-300 uppercase tracking-widest truncate w-full">{sublabel}</span>
   </div>
 );
 
@@ -187,9 +187,9 @@ export default function YearbookPage() {
           </div>
         </div>
         
-        <div className="px-12 -mt-28 flex flex-col items-center md:items-start md:flex-row md:justify-between md:items-end gap-12">
-          <div className="relative group">
-            <div className="w-56 h-56 rounded-[3.5rem] bg-cyber-dark p-2.5 shadow-[0_0_60px_rgba(0,0,0,0.9)] neon-border">
+        <div className="px-6 md:px-12 -mt-24 md:-mt-28 flex flex-col items-center md:items-start md:flex-row md:justify-between md:items-end gap-8 md:gap-12 relative z-10">
+          <div className="relative group shrink-0">
+            <div className="w-40 h-40 md:w-56 md:h-56 rounded-[3.5rem] bg-cyber-dark p-2.5 shadow-[0_0_60px_rgba(0,0,0,0.9)] neon-border">
               <div className="w-full h-full rounded-[3rem] bg-white/10 flex items-center justify-center overflow-hidden border border-white/10">
                 {profile?.avatar_url ? (
                   <img src={profile.avatar_url} className="w-full h-full object-cover" />
@@ -263,7 +263,7 @@ export default function YearbookPage() {
       </header>
 
       {/* Legacy Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-20 px-4 md:px-0">
         <StatCard 
           label="Total Posts" 
           value={isStatsLoading ? "..." : formatStatValue(stats?.totalNodes ?? 0)} 

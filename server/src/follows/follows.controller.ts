@@ -3,6 +3,7 @@ import {
   Post,
   Get,
   Param,
+  Query,
   UseGuards,
   Request,
 } from '@nestjs/common';
@@ -30,12 +31,22 @@ export class FollowsController {
   }
 
   @Get('followers')
-  async getFollowers(@Request() req: AuthenticatedRequest) {
-    return this.followsService.getFollowers(req.user.userId);
+  async getFollowers(
+    @Request() req: AuthenticatedRequest,
+    @Query('limit') limit?: string,
+    @Query('cursor') cursor?: string,
+  ) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 50;
+    return this.followsService.getFollowers(req.user.userId, parsedLimit, cursor);
   }
 
   @Get('following')
-  async getFollowing(@Request() req: AuthenticatedRequest) {
-    return this.followsService.getFollowing(req.user.userId);
+  async getFollowing(
+    @Request() req: AuthenticatedRequest,
+    @Query('limit') limit?: string,
+    @Query('cursor') cursor?: string,
+  ) {
+    const parsedLimit = limit ? parseInt(limit, 10) : 50;
+    return this.followsService.getFollowing(req.user.userId, parsedLimit, cursor);
   }
 }

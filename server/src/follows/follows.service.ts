@@ -76,13 +76,20 @@ export class FollowsService {
     }
   }
 
-  async getFollowers(userId: string) {
+  async getFollowers(userId: string, limit: number = 50, cursor?: string) {
     const client = this.supabaseService.getClient();
-    const { data, error } = await client
+    let query = client
       .from('follows')
-      .select('follower:users(*)')
+      .select('created_at, follower:users(*)')
       .eq('following_id', userId)
-      .limit(50);
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (cursor) {
+      query = query.lt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       this.logger.error(`Error fetching followers: ${error.message}`);
@@ -91,16 +98,23 @@ export class FollowsService {
       );
     }
 
-    return data?.map((item: any) => item.follower) || [];
+    return data?.map((item: any) => ({ ...item.follower, follow_created_at: item.created_at })) || [];
   }
 
-  async getFollowing(userId: string) {
+  async getFollowing(userId: string, limit: number = 50, cursor?: string) {
     const client = this.supabaseService.getClient();
-    const { data, error } = await client
+    let query = client
       .from('follows')
-      .select('following:users(*)')
+      .select('created_at, following:users(*)')
       .eq('follower_id', userId)
-      .limit(50);
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (cursor) {
+      query = query.lt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       this.logger.error(`Error fetching following list: ${error.message}`);
@@ -109,6 +123,6 @@ export class FollowsService {
       );
     }
 
-    return data?.map((item: any) => item.following) || [];
+    return data?.map((item: any) => ({ ...item.following, follow_created_at: item.created_at })) || [];
   }
 }

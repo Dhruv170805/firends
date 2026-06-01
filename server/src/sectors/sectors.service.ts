@@ -21,7 +21,7 @@ export class SectorsService {
     const { data: sector, error: sectorError } = await client
       .rpc('create_sector_with_leader', {
         p_name: createSectorDto.name,
-        p_description: createSectorDto.description,
+        p_description: createSectorDto.description || null,
         p_created_by: userId,
       });
 

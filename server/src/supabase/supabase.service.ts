@@ -21,12 +21,20 @@ export class SupabaseService {
     }
 
     const authHeader = this.request?.headers?.authorization;
-    const options = authHeader ? { global: { headers: { Authorization: authHeader } } } : {};
+    const token = authHeader ? authHeader.replace('Bearer ', '').trim() : undefined;
 
     this.clientInstance = createClient(
       this.configService.get<string>('SUPABASE_URL')!,
       this.configService.get<string>('SUPABASE_ANON_KEY')!,
-      options
+      {
+        global: {
+          headers: authHeader ? { Authorization: authHeader } : undefined,
+        },
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false,
+        },
+      }
     );
     return this.clientInstance;
   }

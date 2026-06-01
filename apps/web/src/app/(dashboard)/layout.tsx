@@ -141,7 +141,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="flex min-h-screen bg-cyber-dark selection:bg-cyber-purple/20 selection:text-cyber-purple flex-col relative overflow-x-hidden">
+    <div className="flex min-h-[100dvh] bg-[#111718] selection:bg-cyber-purple/20 selection:text-cyber-purple flex-col relative overflow-x-hidden">
       {/* God Level Nostalgia Layer */}
       <div className="nostalgia-grain" />
       <div className="light-leak" />
@@ -240,15 +240,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 min-h-screen">
-        <div className="max-w-4xl mx-auto px-6 py-8 md:py-12 pb-32">
+      <main className="flex-1 min-h-[100dvh]">
+        <div className="max-w-4xl mx-auto px-6 py-8 md:py-12 pb-40 md:pb-48">
           {children}
         </div>
       </main>
 
       {/* Unified Portal Navigation - Cyber-Nostalgia Style */}
       {!isOnboarding && (
-        <nav className="fixed bottom-0 inset-x-0 h-20 bg-cyber-dark/80 backdrop-blur-3xl border-t border-white/10 flex justify-around items-center z-50 px-4 pb-safe max-w-2xl mx-auto md:mb-8 md:rounded-[2.5rem] md:border md:border-white/10 md:bottom-4 md:shadow-[0_0_40px_rgba(0,0,0,0.9)]">
+        <nav className="fixed bottom-0 inset-x-0 min-h-[5rem] py-2 bg-[#111718]/90 backdrop-blur-3xl border-t border-white/10 flex justify-around items-center z-50 px-4 pb-[env(safe-area-inset-bottom,0px)] max-w-2xl mx-auto md:mb-8 md:rounded-[2.5rem] md:border md:border-white/10 md:bottom-4 md:shadow-[0_0_40px_rgba(0,0,0,0.9)]">
 
         <Link href="/" className="flex-1 flex flex-col items-center justify-center group gap-1.5">
           <div className={cn(

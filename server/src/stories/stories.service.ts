@@ -32,51 +32,17 @@ export class StoriesService {
   async getActiveStories(userId: string) {
     const client = this.supabaseService.getClient();
 
-    // 1. Fetch users followed by the current user
-    const { data: followingData, error: followingError } = await client
-      .from('follows')
-      .select('following_id')
-      .eq('follower_id', userId);
+    const { data: storiesData, error } = await client
+      .rpc('get_active_stories_for_user', { p_user_id: userId });
 
-    if (followingError) {
-      this.logger.error(
-        `Error getting followed users for stories: ${followingError.message}`,
-      );
+    if (error) {
+      this.logger.error(`Error getting active stories: ${error.message}`);
       throw new BadRequestException(
-        `Failed to fetch stories: ${followingError.message}`,
+        `Failed to fetch active stories: ${error.message}`,
       );
     }
 
-    const targetUserIds = [
-      userId,
-      ...(followingData?.map((f: any) => f.following_id) || []),
-    ];
-
-    let storiesData: any[] = [];
-    const CHUNK_SIZE = 200;
-
-    for (let i = 0; i < targetUserIds.length; i += CHUNK_SIZE) {
-      const chunk = targetUserIds.slice(i, i + CHUNK_SIZE);
-      const { data, error } = await client
-        .from('stories')
-        .select('*, user:users(*)')
-        .in('user_id', chunk)
-        .gt('expires_at', new Date().toISOString())
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        this.logger.error(`Error getting active stories: ${error.message}`);
-        throw new BadRequestException(
-          `Failed to fetch active stories: ${error.message}`,
-        );
-      }
-      
-      if (data) {
-        storiesData = storiesData.concat(data);
-      }
-    }
-
-    // 3. Group stories by user (matching Snapchat/Instagram structures)
+    // Group stories by user (matching Snapchat/Instagram structures)
     const groupedMap = new Map<string, { user: any; stories: any[] }>();
 
     for (const story of storiesData || []) {

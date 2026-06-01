@@ -117,7 +117,7 @@ export class InteractionsService {
     return data;
   }
 
-  async getComments(postId: string) {
+  async getComments(postId: string, limit: number = 50, cursor?: string) {
     const client = this.supabaseService.getClient();
 
     // Check if post exists
@@ -131,12 +131,18 @@ export class InteractionsService {
       throw new NotFoundException(`Post with ID ${postId} not found`);
     }
 
-    const { data, error } = await client
+    let query = client
       .from('comments')
       .select('*, user:users(*)')
       .match({ post_id: postId })
       .order('created_at', { ascending: true })
-      .limit(50);
+      .limit(limit);
+
+    if (cursor) {
+      query = query.gt('created_at', cursor);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       this.logger.error(`Error fetching comments: ${error.message}`);

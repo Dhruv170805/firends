@@ -19,6 +19,15 @@ export const metadata: Metadata = {
   description: "Your college life, preserved.",
 };
 
+import { Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 import { Toaster } from 'sonner';
 
 export default function RootLayout({
