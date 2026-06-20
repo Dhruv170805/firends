@@ -40,3 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env
+
+# PWA
+**/public/sw.js
+**/public/workbox-*.js
+**/public/swe-worker-*.js
+**/public/fallback-*.js

@@ -6,12 +6,17 @@ import {
 } from '@nestjs/common';
 import { SupabaseService } from '../supabase/supabase.service';
 import { CreatePostDto } from './dto/create-post.dto';
+import { InjectQueue } from '@nestjs/bullmq';
+import { Queue } from 'bullmq';
 
 @Injectable()
 export class PostsService {
   private readonly logger = new Logger(PostsService.name);
 
-  constructor(private supabaseService: SupabaseService) {}
+  constructor(
+    private supabaseService: SupabaseService,
+    @InjectQueue('moderation') private moderationQueue: Queue,
+  ) {}
 
   async findAll(limit: number = 10, cursor?: string, userId?: string) {
     const client = this.supabaseService.getClient();
@@ -146,6 +151,17 @@ export class PostsService {
         );
       }
     }
+
+    // Fire-and-forget: Push the new post to the AI Moderation Queue
+    // This allows the user to instantly see their post upload successfully
+    // while the backend analyzes it asynchronously.
+    await this.moderationQueue.add('moderate-post', {
+      postId: post.id,
+      caption: createPostDto.caption,
+      media: createPostDto.media || [],
+    }).catch(err => {
+      this.logger.error(`Failed to push job to moderation queue: ${err.message}`);
+    });
 
     return post;
   }

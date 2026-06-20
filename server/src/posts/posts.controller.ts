@@ -6,7 +6,9 @@ import {
   Query,
   UseGuards,
   Request,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { PostsService } from './posts.service';
 import { SupabaseGuard } from '../auth/supabase.guard';
 import { OptionalSupabaseGuard } from '../auth/optional-supabase.guard';
@@ -32,6 +34,8 @@ export class PostsController {
 
   @Get()
   @UseGuards(OptionalSupabaseGuard)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(15000) // Cache for 15 seconds
   async findAll(
     @Request() req: OptionalAuthenticatedRequest,
     @Query('limit') limit?: number,
@@ -47,6 +51,8 @@ export class PostsController {
 
   @Get('search')
   @UseGuards(OptionalSupabaseGuard)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30000) // Cache search results for 30 seconds
   async search(
     @Request() req: OptionalAuthenticatedRequest,
     @Query('q') query: string,

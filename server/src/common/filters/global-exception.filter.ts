@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import * as Sentry from '@sentry/node';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -43,6 +44,8 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       } else {
         // Unknown errors
         this.logger.error(`Unhandled Exception: ${exception.message || exception}`);
+        // Report 500 errors to Sentry
+        Sentry.captureException(exception);
       }
     }
 

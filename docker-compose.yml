@@ -26,6 +26,16 @@ services:
       - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
       - PORT=3000
       - ALLOWED_ORIGINS=http://localhost:3001
+      - REDIS_URL=redis://redis:6379
+    networks:
+      - firends-network
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
     networks:
       - firends-network
 

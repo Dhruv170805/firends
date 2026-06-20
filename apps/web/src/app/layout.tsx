@@ -15,8 +15,17 @@ const geistMono = Geist_Mono({
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "LegacyLoop",
-  description: "Your college life, preserved.",
+  title: "Connect",
+  description: "Your life, preserved.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Connect",
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 import { Viewport } from "next";
@@ -26,6 +35,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
+  themeColor: "#000000",
 };
 
 import { Toaster } from 'sonner';
