@@ -46,6 +46,20 @@ Desktop.ini
 
 # Turbo
 .turbo
-.env
-apps/mobile
-apps/mobile
+
+# Expo / React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+expo-debug.*
+apps/mobile/ios/
+apps/mobile/android/
+
+# Playwright Test Results
+test-results/
+playwright-report/
+playwright/.cache/

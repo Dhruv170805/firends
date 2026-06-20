@@ -158,6 +158,6 @@ test.describe('Web App Critical Journeys', () => {
     await page.waitForURL('**/', { timeout: 15000 });
     
     // Check that we are on the main feed page and the onboarding gate is cleared
-    await expect(page.getByRole('heading', { level: 2 })).toContainText('Memory');
+    await expect(page.getByRole('heading', { level: 2 })).toContainText('PostFeed');
   });
 });

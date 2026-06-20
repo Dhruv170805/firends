@@ -19,6 +19,7 @@ import { StoriesModule } from './stories/stories.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SectorsModule } from './sectors/sectors.module';
 import { ModerationModule } from './moderation/moderation.module';
+import { SyncModule } from './sync/sync.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { ModerationModule } from './moderation/moderation.module';
     NotificationsModule,
     SectorsModule,
     ModerationModule,
+    SyncModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
