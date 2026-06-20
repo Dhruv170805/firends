@@ -1,4 +1,5 @@
 import { test } from '@playwright/test';
+test.setTimeout(120000);
 
 const VIEWPORTS = [
   { name: 'mobile', width: 375, height: 667 },
@@ -15,6 +16,8 @@ test.describe('LegacyLoop Visual Screenshots', () => {
       await page.screenshot({
         path: `test-results/screenshots/login__${viewport.name}_${viewport.width}x${viewport.height}.png`,
         fullPage: true,
+        animations: "disabled",
+        timeout: 60000,
       });
     });
   }

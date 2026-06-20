@@ -6,7 +6,7 @@ test.describe('Accessibility Audits', () => {
     await page.goto('/login');
     
     // Wait for main content to render
-    await expect(page.getByRole('heading', { level: 2, name: /Legacy/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /Legacy/i })).toBeVisible();
 
     const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
     

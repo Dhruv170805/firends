@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { SentryInterceptor } from './common/interceptors/sentry.interceptor';
 import helmet from 'helmet';
-import * as compression from 'compression';
+import compression from 'compression';
 import * as Sentry from '@sentry/node';
 import { nodeProfilingIntegration } from '@sentry/profiling-node';
 

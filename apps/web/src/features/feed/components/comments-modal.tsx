@@ -68,7 +68,7 @@ export function CommentsModal({ post, onClose }: CommentsModalProps) {
               <p className="text-xs text-gray-500 mt-1">Be the first to share your thoughts.</p>
             </div>
           ) : (
-            comments?.map((comment) => (
+            comments?.map((comment: any) => (
               <div key={comment.id} className="flex gap-4 group">
                 <div className="w-10 h-10 rounded-full border border-white/10 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center">
                   {comment.user?.avatar_url ? (
