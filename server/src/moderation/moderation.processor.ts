@@ -8,22 +8,26 @@ export class ModerationProcessor extends WorkerHost {
 
   async process(job: Job<any, any, string>): Promise<any> {
     this.logger.log(`Received job ${job.id} for post moderation.`);
-    const { postId, caption, media } = job.data;
+    const { postId, caption } = job.data;
 
     this.logger.log(`Analyzing content for post ${postId}...`);
-    
+
     // Simulate an AI Model delay (e.g. sending image/text to Google Cloud Vision or OpenAI)
     await new Promise((resolve) => setTimeout(resolve, 2500));
 
     // Heuristics or AI Response Mock
     const isClean = this.simulateAIModeration(caption);
-    
+
     if (isClean) {
-      this.logger.log(`[PASS] Post ${postId} successfully passed AI moderation.`);
+      this.logger.log(
+        `[PASS] Post ${postId} successfully passed AI moderation.`,
+      );
       // In a real scenario, you might update the post's moderation_status to 'approved' here.
     } else {
-      this.logger.warn(`[REJECT] Post ${postId} failed AI moderation! Content flagged.`);
-      // In a real scenario, you would invoke the Supabase client here to hide/delete the post 
+      this.logger.warn(
+        `[REJECT] Post ${postId} failed AI moderation! Content flagged.`,
+      );
+      // In a real scenario, you would invoke the Supabase client here to hide/delete the post
       // or flag it for manual human review.
     }
 
@@ -32,11 +36,11 @@ export class ModerationProcessor extends WorkerHost {
 
   private simulateAIModeration(caption?: string): boolean {
     if (!caption) return true;
-    
+
     // Simple mock logic: reject if it contains certain bad words
     const flaggedWords = ['spam', 'scam', 'abuse'];
     const lowerCaption = caption.toLowerCase();
-    
-    return !flaggedWords.some(word => lowerCaption.includes(word));
+
+    return !flaggedWords.some((word) => lowerCaption.includes(word));
   }
 }

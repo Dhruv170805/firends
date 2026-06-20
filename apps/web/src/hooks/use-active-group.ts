@@ -14,7 +14,7 @@ export function useActiveGroup() {
     if (saved) {
       try {
         setActiveGroup(JSON.parse(saved));
-      } catch (e) {
+      } catch {
         localStorage.removeItem('activeGroup');
       }
     }

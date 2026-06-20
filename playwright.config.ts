@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
+dotenv.config({ path: path.resolve(__dirname, 'apps/web/.env.local') });
 /**
  * See https://playwright.dev/docs/test-configuration.
  */

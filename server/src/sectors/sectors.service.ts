@@ -18,12 +18,14 @@ export class SectorsService {
     const client = this.supabaseService.getClient();
 
     // 1. Create the Sector & Leader via atomic RPC
-    const { data: sector, error: sectorError } = await client
-      .rpc('create_sector_with_leader', {
+    const { data: sector, error: sectorError } = await client.rpc(
+      'create_sector_with_leader',
+      {
         p_name: createSectorDto.name,
         p_description: createSectorDto.description || null,
         p_created_by: userId,
-      });
+      },
+    );
 
     if (sectorError || !sector) {
       this.logger.error(`Error creating sector: ${sectorError?.message}`);
@@ -106,9 +108,7 @@ export class SectorsService {
           'User is already a member of this Sector.',
         );
       }
-      throw new BadRequestException(
-        'Failed to add member to the sector.',
-      );
+      throw new BadRequestException('Failed to add member to the sector.');
     }
 
     return newMember;
@@ -230,7 +230,7 @@ export class SectorsService {
     }
 
     // 2. Add the user as a member
-    const { data: newMember, error: insertError } = await client
+    const { error: insertError } = await client
       .from('sector_members')
       .insert({
         sector_id: sector.id,
@@ -247,9 +247,7 @@ export class SectorsService {
           'You are already a member of this Sector.',
         );
       }
-      throw new BadRequestException(
-        'Failed to join sector.',
-      );
+      throw new BadRequestException('Failed to join sector.');
     }
 
     return sector;

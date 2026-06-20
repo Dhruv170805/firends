@@ -37,7 +37,11 @@ export class FollowsController {
     @Query('cursor') cursor?: string,
   ) {
     const parsedLimit = limit ? parseInt(limit, 10) : 50;
-    return this.followsService.getFollowers(req.user.userId, parsedLimit, cursor);
+    return this.followsService.getFollowers(
+      req.user.userId,
+      parsedLimit,
+      cursor,
+    );
   }
 
   @Get('following')
@@ -47,6 +51,10 @@ export class FollowsController {
     @Query('cursor') cursor?: string,
   ) {
     const parsedLimit = limit ? parseInt(limit, 10) : 50;
-    return this.followsService.getFollowing(req.user.userId, parsedLimit, cursor);
+    return this.followsService.getFollowing(
+      req.user.userId,
+      parsedLimit,
+      cursor,
+    );
   }
 }

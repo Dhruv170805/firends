@@ -75,7 +75,7 @@ const ReelItem = ({ post }: { post: Post }) => {
               setLikesCount((prev: number) => isLiked ? prev - 1 : prev + 1);
               try {
                 await apiFetch(`/interactions/like/${post.id}`, { method: 'POST' });
-              } catch (error) {
+              } catch {
                 setIsLiked(previousIsLiked);
                 setLikesCount(previousLikesCount);
               }

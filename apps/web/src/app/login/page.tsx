@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Mail, Lock, User, Phone, Upload, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Mail, Lock, User, Phone, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -147,7 +147,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cyber-dark px-4 py-12 relative overflow-hidden selection:bg-cyber-purple/20 selection:text-cyber-purple">
+    <main className="flex min-h-screen items-center justify-center bg-cyber-dark px-4 py-12 relative overflow-hidden selection:bg-cyber-purple/20 selection:text-cyber-purple">
       {/* Premium Nostalgia Elements */}
       <div className="nostalgia-grain" />
       <div className="light-leak" />
@@ -162,9 +162,9 @@ export default function LoginPage() {
               <span className="text-3xl font-black italic tracking-tighter text-white select-none">L²</span>
             </div>
           </div>
-          <h2 className="text-5xl font-black tracking-tight text-white mb-2">
+          <h1 className="text-5xl font-black tracking-tight text-white mb-2">
             Legacy<span className="cyber-gradient-text">Loop</span>
-          </h2>
+          </h1>
           <p className="text-gray-400 font-bold tracking-widest uppercase text-[9px] tracking-[0.25em] mt-3">
             Secure Online Yearbook
           </p>
@@ -402,6 +402,6 @@ export default function LoginPage() {
           </p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

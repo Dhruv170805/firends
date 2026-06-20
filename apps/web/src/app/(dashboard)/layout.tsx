@@ -3,8 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import { Home, PlusSquare, User, LogOut, Search, PlaySquare, Map, Camera, Library, Users, ChevronDown } from 'lucide-react';
-import Link from 'next/link';
+
 import { apiFetch } from '@/lib/api';
 import { useActiveGroup } from '@/hooks/use-active-group';
 import { toast } from 'sonner';
@@ -15,7 +14,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [loading, setLoading] = useState(true);
   const [sectorsLoaded, setSectorsLoaded] = useState(false);
   const [groups, setGroups] = useState<any[]>([]);
-  const [isGroupDropdownOpen, setIsGroupDropdownOpen] = useState(false);
+
   const { activeGroup, changeGroup } = useActiveGroup();
   const router = useRouter();
   const pathname = usePathname();

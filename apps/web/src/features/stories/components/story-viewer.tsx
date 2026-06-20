@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { X, ChevronLeft, ChevronRight, User } from 'lucide-react';
-import { cn } from '@/lib/utils';
+
 
 export interface StoryItem {
   id: string;
@@ -64,6 +64,7 @@ export function StoryViewer({
     return () => {
       if (progressInterval.current) clearInterval(progressInterval.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, user.id]);
 
   const handleNext = () => {

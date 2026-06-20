@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { User, Mail, GraduationCap, Calendar, Shield, Bell, Settings, ChevronRight, Edit2, Save, X, Loader2, Library, Sparkles, BarChart3, Clock } from 'lucide-react';
+import { User, GraduationCap, Shield, Settings, ChevronRight, Save, X, Loader2, Sparkles, BarChart3, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
@@ -192,7 +191,7 @@ export default function YearbookPage() {
             <div className="w-40 h-40 md:w-56 md:h-56 rounded-[3.5rem] bg-cyber-dark p-1.5 shadow-[0_0_60px_rgba(0,0,0,0.9)] neon-border">
               <div className="w-full h-full rounded-[3rem] bg-white/10 flex items-center justify-center overflow-hidden border border-white/10">
                 {profile?.avatar_url ? (
-                  <img src={profile.avatar_url} className="w-full h-full object-cover" />
+                  <img src={profile.avatar_url} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                   <User size={100} className="text-gray-700" />
                 )}

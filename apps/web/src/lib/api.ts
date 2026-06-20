@@ -29,12 +29,12 @@ export const apiFetch = async (endpoint: string, options: RequestInit = {}) => {
       try {
         const errorData = await response.json();
         errorMessage = errorData.message || errorMessage;
-      } catch (_) {}
+      } catch {}
     } else {
       try {
         const text = await response.text();
         errorMessage = text || errorMessage;
-      } catch (_) {}
+      } catch {}
     }
     throw new Error(errorMessage);
   }

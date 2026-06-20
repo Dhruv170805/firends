@@ -7,25 +7,28 @@ export class SyncService {
 
   constructor(private supabaseService: SupabaseService) {}
 
-  async pullChanges(lastPulledAt: number, userId: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async pullChanges(lastPulledAt: number, _userId: string) {
     const supabase = this.supabaseService.getClient();
     // Convert JS timestamp to ISO or use direct numeric comparisons if Postgres uses unix epoch.
     // Assuming Supabase stores timestamps as timestamptz.
     const lastPulledISO = new Date(lastPulledAt).toISOString();
-    
+
     // In a production scenario, we'd only return data relevant to this user's sectors,
     // but for MVP we pull all globally visible rows updated since lastPulledISO.
-    
+
     // Users
     const { data: usersData } = await supabase
       .from('users')
       .select('id, email, username, full_name, created_at')
       .gt('created_at', lastPulledISO); // Simplified: Using created_at for 'created' (updates handled differently usually)
-      
+
     // Posts
     const { data: postsData } = await supabase
       .from('posts')
-      .select('id, content, user_id, sector_id, latitude, longitude, created_at')
+      .select(
+        'id, content, user_id, sector_id, latitude, longitude, created_at',
+      )
       .gt('created_at', lastPulledISO);
 
     // Comments
@@ -76,19 +79,19 @@ export class SyncService {
   async pushChanges(changes: any, userId: string) {
     const supabase = this.supabaseService.getClient();
     this.logger.log(`Received push sync from user ${userId}`);
-    
+
     // Very simplified push handling for WatermelonDB:
     // Insert created records, Update updated records, Delete deleted records
-    
+
     if (changes.posts?.created?.length) {
       await supabase.from('posts').insert(changes.posts.created);
     }
     if (changes.comments?.created?.length) {
       await supabase.from('comments').insert(changes.comments.created);
     }
-    
+
     // Handling updates/deletes securely requires RLS, which Supabase already enforces via JWT.
-    
+
     return { success: true };
   }
 }

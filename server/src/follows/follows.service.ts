@@ -98,7 +98,12 @@ export class FollowsService {
       );
     }
 
-    return data?.map((item: any) => ({ ...item.follower, follow_created_at: item.created_at })) || [];
+    return (
+      data?.map((item: any) => ({
+        ...item.follower,
+        follow_created_at: item.created_at,
+      })) || []
+    );
   }
 
   async getFollowing(userId: string, limit: number = 50, cursor?: string) {
@@ -123,6 +128,11 @@ export class FollowsService {
       );
     }
 
-    return data?.map((item: any) => ({ ...item.following, follow_created_at: item.created_at })) || [];
+    return (
+      data?.map((item: any) => ({
+        ...item.following,
+        follow_created_at: item.created_at,
+      })) || []
+    );
   }
 }

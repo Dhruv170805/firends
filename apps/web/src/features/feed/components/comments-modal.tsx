@@ -72,7 +72,7 @@ export function CommentsModal({ post, onClose }: CommentsModalProps) {
               <div key={comment.id} className="flex gap-4 group">
                 <div className="w-10 h-10 rounded-full border border-white/10 bg-white/5 overflow-hidden flex-shrink-0 flex items-center justify-center">
                   {comment.user?.avatar_url ? (
-                    <img src={comment.user.avatar_url} className="w-full h-full object-cover" />
+                    <img src={comment.user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                   ) : (
                     <User size={16} className="text-gray-400" />
                   )}

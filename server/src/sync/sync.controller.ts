@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SyncService } from './sync.service';
 import { SupabaseGuard } from '../auth/supabase.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';

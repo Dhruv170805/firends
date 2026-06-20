@@ -121,7 +121,7 @@ test.describe('Web App Critical Journeys', () => {
 
     // 6. Visit Login Page
     await page.goto('/login');
-    await expect(page.getByRole('heading', { level: 2 })).toContainText('Legacy');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Legacy');
 
     // 7. Switch to Sign Up tab (with retry to handle hydration race conditions)
     await expect(async () => {

@@ -41,10 +41,12 @@ import { SyncModule } from './sync/sync.module';
         },
       }),
     }),
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
     SupabaseModule,
     AuthModule,
     PostsModule,

@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { apiFetch } from '@/lib/api';
 import { useQueryClient } from '@tanstack/react-query';
-import { Loader2, Camera, MapPin, Send, X, Image as ImageIcon, Globe, Lock, Library, Users } from 'lucide-react';
+import { Loader2, Camera, MapPin, Send, X, Image as ImageIcon, Globe, Lock, Users } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';

@@ -8,20 +8,15 @@ import { CyberCard } from '@/components/ui/cyber-card';
 import { 
   Users, 
   Plus, 
-  Settings, 
   UserPlus, 
-  MessageSquare, 
   Lock, 
-  ShieldAlert, 
   X, 
   Send, 
   Loader2,
-  Calendar,
   Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
 import { useActiveGroup } from '@/hooks/use-active-group';
 
 interface Sector {
@@ -98,6 +93,7 @@ export default function SectorsPage() {
 
   useEffect(() => {
     fetchSectors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Sync local activeSector with global activeGroup
@@ -107,6 +103,7 @@ export default function SectorsPage() {
         changeGroup({ id: activeSector.id, name: activeSector.name });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSector]);
 
   useEffect(() => {
@@ -116,6 +113,7 @@ export default function SectorsPage() {
         setActiveSector(matched);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeGroup, sectors]);
 
   // Fetch active sector posts & members
@@ -197,7 +195,7 @@ export default function SectorsPage() {
 
     setSubmittingInvite(true);
     try {
-      const added = await apiFetch(`/sectors/${activeSector.id}/members`, {
+      await apiFetch(`/sectors/${activeSector.id}/members`, {
         method: 'POST',
         body: JSON.stringify({ username: inviteUsername.trim() }),
       });

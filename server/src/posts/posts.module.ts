@@ -7,7 +7,7 @@ import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
-    SupabaseModule, 
+    SupabaseModule,
     AuthModule,
     BullModule.registerQueue({
       name: 'moderation',

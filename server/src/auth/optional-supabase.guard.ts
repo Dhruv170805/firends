@@ -28,7 +28,7 @@ export class OptionalSupabaseGuard implements CanActivate {
       if (!error && user) {
         request.user = { userId: user.id, email: user.email };
       }
-    } catch (e) {
+    } catch {
       // Ignore errors for optional authentication
     }
 

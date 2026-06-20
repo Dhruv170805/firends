@@ -65,17 +65,19 @@ export class PostsService {
 
   async search(query: string, userId?: string) {
     const client = this.supabaseService.getClient();
-    
+
     // Sanitize query to prevent PostgREST syntax injection
     const sanitizedQuery = query.replace(/[%,"]/g, '').trim();
-    
+
     const { data, error } = await client
       .from('posts')
       .select(
         '*, user:users(*), media:post_media(*), likes(count), comments(count)',
       )
       .is('sector_id', null)
-      .or(`caption.ilike.%${sanitizedQuery}%,location.ilike.%${sanitizedQuery}%`)
+      .or(
+        `caption.ilike.%${sanitizedQuery}%,location.ilike.%${sanitizedQuery}%`,
+      )
       .order('created_at', { ascending: false })
       .limit(20);
 
@@ -155,13 +157,17 @@ export class PostsService {
     // Fire-and-forget: Push the new post to the AI Moderation Queue
     // This allows the user to instantly see their post upload successfully
     // while the backend analyzes it asynchronously.
-    await this.moderationQueue.add('moderate-post', {
-      postId: post.id,
-      caption: createPostDto.caption,
-      media: createPostDto.media || [],
-    }).catch(err => {
-      this.logger.error(`Failed to push job to moderation queue: ${err.message}`);
-    });
+    await this.moderationQueue
+      .add('moderate-post', {
+        postId: post.id,
+        caption: createPostDto.caption,
+        media: createPostDto.media || [],
+      })
+      .catch((err) => {
+        this.logger.error(
+          `Failed to push job to moderation queue: ${err.message}`,
+        );
+      });
 
     return post;
   }

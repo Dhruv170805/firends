@@ -18,7 +18,7 @@ test.describe('Web App Smoke Tests', () => {
     expect(response?.status()).toBe(200);
 
     // Verify presence of logo and title text
-    const title = page.getByRole('heading', { level: 2 });
+    const title = page.getByRole('heading', { level: 1 });
     await expect(title).toContainText('Legacy');
   });
 });

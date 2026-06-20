@@ -11,7 +11,7 @@ export class SupabaseService {
 
   constructor(
     @Inject(REQUEST) private request: Request,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   getClient() {
@@ -21,7 +21,6 @@ export class SupabaseService {
     }
 
     const authHeader = this.request?.headers?.authorization;
-    const token = authHeader ? authHeader.replace('Bearer ', '').trim() : undefined;
 
     this.clientInstance = createClient(
       this.configService.get<string>('SUPABASE_URL')!,
@@ -34,7 +33,7 @@ export class SupabaseService {
           persistSession: false,
           autoRefreshToken: false,
         },
-      }
+      },
     );
     return this.clientInstance;
   }

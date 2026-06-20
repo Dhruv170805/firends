@@ -12,7 +12,7 @@ interface PostCardProps {
   isLast?: boolean;
 }
 
-export function PostCard({ post, isFirst, isLast }: PostCardProps) {
+export function PostCard({ post, isLast }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(post.is_liked);
   const [likesCount, setLikesCount] = useState(post.likes_count || 0);
   const [isLiking, setIsLiking] = useState(false);
@@ -27,7 +27,7 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
     try {
       const response = await apiFetch(`/interactions/like/${post.id}`, { method: 'POST' });
       setIsLiked(response.liked);
-    } catch (error) {
+    } catch {
       setIsLiked(!newLiked);
       setLikesCount((prev: number) => !newLiked ? prev + 1 : prev - 1);
     } finally {

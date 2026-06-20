@@ -24,4 +24,10 @@ npm install
 npm run web:dev
 npm run server:dev
 npm run mobile:start
+
+# Run E2E Tests
+npx playwright test
 ```
+
+## Testing
+Playwright is configured for End-to-End testing. Test results, including photos, videos, and traces generated upon test failures, are automatically saved to `test-results/` and `playwright-report/` (which are ignored in git).

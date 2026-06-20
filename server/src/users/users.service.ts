@@ -77,8 +77,9 @@ export class UsersService {
   async getStats(userId: string) {
     const client = this.supabaseService.getClient();
 
-    const { data, error } = await client
-      .rpc('get_user_stats', { p_user_id: userId });
+    const { data, error } = await client.rpc('get_user_stats', {
+      p_user_id: userId,
+    });
 
     if (error || !data) {
       this.logger.error(`Error fetching user stats: ${error?.message}`);

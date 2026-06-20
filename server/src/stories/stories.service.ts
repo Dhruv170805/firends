@@ -32,8 +32,10 @@ export class StoriesService {
   async getActiveStories(userId: string) {
     const client = this.supabaseService.getClient();
 
-    const { data: storiesData, error } = await client
-      .rpc('get_active_stories_for_user', { p_user_id: userId });
+    const { data: storiesData, error } = await client.rpc(
+      'get_active_stories_for_user',
+      { p_user_id: userId },
+    );
 
     if (error) {
       this.logger.error(`Error getting active stories: ${error.message}`);

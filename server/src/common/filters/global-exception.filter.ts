@@ -43,7 +43,9 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         status = HttpStatus.BAD_REQUEST; // Often 400 for constraints
       } else {
         // Unknown errors
-        this.logger.error(`Unhandled Exception: ${exception.message || exception}`);
+        this.logger.error(
+          `Unhandled Exception: ${exception.message || exception}`,
+        );
         // Report 500 errors to Sentry
         Sentry.captureException(exception);
       }

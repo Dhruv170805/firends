@@ -5,7 +5,7 @@ test.describe('Visual Regression Tests', () => {
     await page.goto('/login');
     
     // Wait for the main content to settle
-    await expect(page.getByRole('heading', { level: 2, name: /Legacy/i })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: /Legacy/i })).toBeVisible();
 
     // Take a full page screenshot and compare it against the baseline
     await expect(page).toHaveScreenshot('login-page.png', {

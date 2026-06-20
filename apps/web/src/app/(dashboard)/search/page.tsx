@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api';
-import { Map as MapIcon, Search, X, MapPin, Camera, Loader2, Sparkles, Navigation } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { X, MapPin, Sparkles, Navigation } from 'lucide-react';
 
 const HotspotMarker = ({ post, onClick }: { post: any, onClick: () => void }) => {
   // Map coordinates (approx 37.42, -122.16) to SVG 1000x1000 space
@@ -115,7 +114,7 @@ export default function CampusMapPage() {
             <div className="flex items-center gap-4 mb-6">
               <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
                 {selectedPost.user?.avatar_url ? (
-                  <img src={selectedPost.user.avatar_url} className="w-full h-full object-cover" />
+                  <img src={selectedPost.user.avatar_url} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-xl font-black text-gray-500 uppercase">{selectedPost.user?.username?.charAt(0)}</span>
                 )}
@@ -134,7 +133,7 @@ export default function CampusMapPage() {
                 {selectedPost.media[0].media_type === 'video' ? (
                   <video src={selectedPost.media[0].media_url} className="w-full h-full object-cover" autoPlay muted loop playsInline />
                 ) : (
-                  <img src={selectedPost.media[0].media_url} className="w-full h-full object-cover" />
+                  <img src={selectedPost.media[0].media_url} alt="Media" className="w-full h-full object-cover" />
                 )}
               </div>
             )}
