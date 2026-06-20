@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('LegacyLoop Critical Journeys', () => {
+test.describe('Web App Critical Journeys', () => {
   const uniqueId = Date.now();
   const testEmail = `qa_user_${uniqueId}@university.edu`;
   const testUsername = `qa_user_${uniqueId}`;
@@ -121,43 +121,43 @@ test.describe('LegacyLoop Critical Journeys', () => {
 
     // 6. Visit Login Page
     await page.goto('/login');
-    await expect(page.locator('h2')).toContainText('Legacy');
+    await expect(page.getByRole('heading', { level: 2 })).toContainText('Legacy');
 
     // 7. Switch to Sign Up tab (with retry to handle hydration race conditions)
     await expect(async () => {
-      await page.click('button:has-text("Create Account")');
-      await expect(page.locator('input[placeholder="John Doe"]')).toBeVisible({ timeout: 1000 });
+      await page.getByRole('button', { name: 'Create Account' }).click();
+      await expect(page.getByPlaceholder('John Doe')).toBeVisible({ timeout: 1000 });
     }).toPass({
       intervals: [500, 1000],
       timeout: 10000
     });
 
     // 8. Fill in registration details
-    await page.fill('input[placeholder="John Doe"]', testFullName);
-    await page.fill('input[placeholder="johndoe"]', testUsername);
-    await page.fill('input[placeholder="name@university.edu"]', testEmail);
-    await page.fill('input[placeholder="+1 (555) 000-0000"]', '+15551234567');
-    await page.fill('input[placeholder="Min 6 characters"]', testPassword);
+    await page.getByPlaceholder('John Doe').fill(testFullName);
+    await page.getByPlaceholder('johndoe').fill(testUsername);
+    await page.getByPlaceholder('name@university.edu').fill(testEmail);
+    await page.getByPlaceholder('+1 (555) 000-0000').fill('+15551234567');
+    await page.getByPlaceholder('Min 6 characters').fill(testPassword);
 
     // 9. Submit Registration
-    await page.click('button[type="submit"]:has-text("Create Account")', { force: true });
+    await page.locator('button[type="submit"]:has-text("Create Account")').click({ force: true });
 
     // 10. Assert successful login redirect to onboarding
     await page.waitForURL('**/sectors/onboarding', { timeout: 15000 });
-    await expect(page.locator('h2')).toContainText('Choose Your Group');
+    await expect(page.getByRole('heading', { level: 2 })).toContainText('Choose Your Group');
 
     // 11. Establish a new Sector
-    await page.click('button:has-text("Create a Group")', { force: true });
-    await page.fill('input[placeholder="e.g. Batch of 2008, Study Group..."]', `QA Pod ${uniqueId}`);
-    await page.fill('textarea[placeholder="Describe who is in this group..."]', 'Automatic QA testing Pod');
+    await page.getByRole('button', { name: 'Create a Group' }).click({ force: true });
+    await page.getByPlaceholder('e.g. Batch of 2008, Study Group...').fill(`QA Pod ${uniqueId}`);
+    await page.getByPlaceholder('Describe who is in this group...').fill('Automatic QA testing Pod');
 
     // 12. Submit Sector Creation
-    await page.click('button[type="submit"]', { force: true });
+    await page.locator('button[type="submit"]').click({ force: true });
 
     // 13. Assert redirection back to home page timeline
     await page.waitForURL('**/', { timeout: 15000 });
     
     // Check that we are on the main feed page and the onboarding gate is cleared
-    await expect(page.locator('h2')).toContainText('Memory');
+    await expect(page.getByRole('heading', { level: 2 })).toContainText('Memory');
   });
 });

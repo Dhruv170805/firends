@@ -102,7 +102,7 @@ export default function CreatePostPage() {
           sector_id: selectedSectorId || null,
           media: mediaUrl ? [{
             media_url: mediaUrl,
-            media_type: 'image'
+            media_type: image?.type.startsWith('video/') ? 'video' : 'image'
           }] : []
         }),
       });
@@ -142,7 +142,11 @@ export default function CreatePostPage() {
             <div className="relative">
               {imagePreview ? (
                 <div className="relative rounded-[2.5rem] overflow-hidden aspect-video bg-white/10 border border-white/20 group shadow-2xl">
-                  <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  {image?.type.startsWith('video/') ? (
+                    <video src={imagePreview} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                  ) : (
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                  )}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                     <button
                       type="button"
@@ -163,8 +167,8 @@ export default function CreatePostPage() {
                     <ImageIcon size={40} className="text-cyber-purple" />
                   </div>
                   <div className="text-center">
-                    <span className="block font-black text-white text-xl tracking-tight mb-1">Add Image</span>
-                    <span className="text-sm font-bold opacity-60">Upload a photo for your post (Max 5MB)</span>
+                    <span className="block font-black text-white text-xl tracking-tight mb-1">Add Media</span>
+                    <span className="text-sm font-bold opacity-60">Upload a photo or video (Max 50MB)</span>
                   </div>
                 </button>
               )}
@@ -172,7 +176,7 @@ export default function CreatePostPage() {
                 type="file"
                 ref={fileInputRef}
                 className="hidden"
-                accept="image/*"
+                accept="image/*,video/*"
                 onChange={handleImageChange}
               />
             </div>

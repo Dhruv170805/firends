@@ -4,6 +4,7 @@ import { apiFetch } from '@/lib/api';
 import { MapPin, MoreHorizontal, Heart, MessageCircle, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { CyberCard } from '@/components/ui/cyber-card';
+import { CommentsModal } from './comments-modal';
 
 interface PostCardProps {
   post: Post;
@@ -15,6 +16,7 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
   const [isLiked, setIsLiked] = useState(post.is_liked);
   const [likesCount, setLikesCount] = useState(post.likes_count || 0);
   const [isLiking, setIsLiking] = useState(false);
+  const [isCommentsOpen, setIsCommentsOpen] = useState(false);
 
   const handleLike = async () => {
     if (isLiking) return;
@@ -106,12 +108,23 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
 
         {post.media && post.media.length > 0 && (
           <div className="rounded-[2.5rem] overflow-hidden mb-8 bg-white/5 aspect-[16/10] relative group/media border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] memory-glow">
-            <img 
-              src={post.media[0].media_url} 
-              alt="Post Image"
-              className="w-full h-full object-cover group-hover/media:scale-110 transition-transform duration-[2000ms] ease-out"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark/80 via-transparent to-transparent opacity-70" />
+            {post.media[0].media_type === 'video' ? (
+              <video 
+                src={post.media[0].media_url} 
+                className="w-full h-full object-cover group-hover/media:scale-110 transition-transform duration-[2000ms] ease-out"
+                autoPlay 
+                muted 
+                loop 
+                playsInline
+              />
+            ) : (
+              <img 
+                src={post.media[0].media_url} 
+                alt="Post Media"
+                className="w-full h-full object-cover group-hover/media:scale-110 transition-transform duration-[2000ms] ease-out"
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-cyber-dark/80 via-transparent to-transparent opacity-70 pointer-events-none" />
             
             {/* Shimmering Overlay */}
             <div className="absolute inset-0 bg-gradient-to-tr from-cyber-purple/20 via-transparent to-cyber-pink/20 opacity-40 group-hover/media:opacity-100 transition-opacity animate-pulse" />
@@ -131,7 +144,10 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
               <Heart className={cn("w-7 h-7 transition-transform", isLiked && "fill-current neon-glow-pink scale-110")} />
               <span className="text-sm font-black tracking-widest">{likesCount}</span>
             </button>
-            <button className="flex items-center gap-2.5 text-gray-400 hover:text-cyber-purple transition-all group p-1 cursor-pointer">
+            <button 
+              onClick={() => setIsCommentsOpen(true)}
+              className="flex items-center gap-2.5 text-gray-400 hover:text-cyber-purple transition-all group p-1 cursor-pointer"
+            >
               <MessageCircle className="w-7 h-7 group-hover:neon-glow-purple transition-transform group-hover:scale-110" />
               <span className="text-sm font-black tracking-widest">{post.comments_count || 0}</span>
             </button>
@@ -141,6 +157,13 @@ export function PostCard({ post, isFirst, isLast }: PostCardProps) {
           </button>
         </div>
       </CyberCard>
+
+      {isCommentsOpen && (
+        <CommentsModal 
+          post={post} 
+          onClose={() => setIsCommentsOpen(false)} 
+        />
+      )}
     </div>
   );
 }

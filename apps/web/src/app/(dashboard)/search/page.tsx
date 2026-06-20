@@ -62,7 +62,7 @@ export default function CampusMapPage() {
       </header>
 
       <div className="flex-1 relative cyber-glass rounded-[4rem] overflow-hidden border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] bg-[#0A0F1A]">
-        {/* Abstract Cyber Map Grid */}
+        {/* Abstract Map Grid UI */}
         <div className="absolute inset-0 opacity-20 pointer-events-none" 
              style={{ backgroundImage: 'radial-gradient(circle, #A855F7 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         
@@ -131,7 +131,11 @@ export default function CampusMapPage() {
 
             {selectedPost.media?.[0] && (
               <div className="rounded-2xl overflow-hidden mb-6 aspect-video border border-white/10">
-                <img src={selectedPost.media[0].media_url} className="w-full h-full object-cover" />
+                {selectedPost.media[0].media_type === 'video' ? (
+                  <video src={selectedPost.media[0].media_url} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                ) : (
+                  <img src={selectedPost.media[0].media_url} className="w-full h-full object-cover" />
+                )}
               </div>
             )}
 

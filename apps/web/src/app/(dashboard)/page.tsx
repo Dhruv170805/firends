@@ -18,7 +18,7 @@ export default function PortalPage() {
         <NotificationBell />
       </div>
 
-      {/* Stories Node Line - Snapchat Style */}
+      {/* Stories Node Line - Modern Full-Screen */}
       <section className="relative">
         <StoryBubbleList />
       </section>

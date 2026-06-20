@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('LegacyLoop Smoke Tests', () => {
+test.describe('Web App Smoke Tests', () => {
   test.beforeEach(async ({ page }) => {
     // Clear any storage/cookies to ensure clean state
     await page.context().clearCookies();
@@ -18,7 +18,7 @@ test.describe('LegacyLoop Smoke Tests', () => {
     expect(response?.status()).toBe(200);
 
     // Verify presence of logo and title text
-    const title = page.locator('h2');
+    const title = page.getByRole('heading', { level: 2 });
     await expect(title).toContainText('Legacy');
   });
 });

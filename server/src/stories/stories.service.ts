@@ -42,7 +42,7 @@ export class StoriesService {
       );
     }
 
-    // Group stories by user (matching Snapchat/Instagram structures)
+    // Group stories by user (matching Standard/Standard structures)
     const groupedMap = new Map<string, { user: any; stories: any[] }>();
 
     for (const story of storiesData || []) {

@@ -189,7 +189,7 @@ export default function YearbookPage() {
         
         <div className="px-6 md:px-12 -mt-24 md:-mt-28 flex flex-col items-center md:items-start md:flex-row md:justify-between md:items-end gap-8 md:gap-12 relative z-10">
           <div className="relative group shrink-0">
-            <div className="w-40 h-40 md:w-56 md:h-56 rounded-[3.5rem] bg-cyber-dark p-2.5 shadow-[0_0_60px_rgba(0,0,0,0.9)] neon-border">
+            <div className="w-40 h-40 md:w-56 md:h-56 rounded-[3.5rem] bg-cyber-dark p-1.5 shadow-[0_0_60px_rgba(0,0,0,0.9)] neon-border">
               <div className="w-full h-full rounded-[3rem] bg-white/10 flex items-center justify-center overflow-hidden border border-white/10">
                 {profile?.avatar_url ? (
                   <img src={profile.avatar_url} className="w-full h-full object-cover" />

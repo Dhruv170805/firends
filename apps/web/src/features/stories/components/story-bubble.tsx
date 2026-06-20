@@ -73,7 +73,7 @@ export function StoryBubbleList() {
       const uploadedUrl = await uploadImage(image);
       createStoryMutation.mutate({
         media_url: uploadedUrl,
-        media_type: 'image',
+        media_type: image.type.startsWith('video/') ? 'video' : 'image',
       });
     } catch (err: any) {
       toast.error(err.message || 'Failed to upload story asset');
@@ -150,7 +150,7 @@ export function StoryBubbleList() {
         ))}
       </div>
 
-      {/* Snapchat-Style Story Viewer Modal */}
+      {/* Modern Full-Screen Story Viewer Modal */}
       {activeGroup && (
         <StoryViewer
           user={activeGroup.user}
@@ -172,7 +172,11 @@ export function StoryBubbleList() {
               <div className="relative">
                 {imagePreview ? (
                   <div className="relative rounded-[2rem] overflow-hidden aspect-[9/12] bg-white/10 border border-white/20 group shadow-2xl">
-                    <img src={imagePreview} alt="Story Preview" className="w-full h-full object-cover" />
+                    {image?.type.startsWith('video/') ? (
+                      <video src={imagePreview} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                    ) : (
+                      <img src={imagePreview} alt="Story Preview" className="w-full h-full object-cover" />
+                    )}
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
                       <button
                         type="button"
@@ -193,8 +197,8 @@ export function StoryBubbleList() {
                       <Camera size={32} className="text-cyber-purple" />
                     </div>
                     <div className="text-center px-6">
-                      <span className="block font-black text-white text-sm tracking-tight mb-1">Add Image</span>
-                      <span className="text-sm font-bold opacity-60">Choose a photo (Max 5MB)</span>
+                      <span className="block font-black text-white text-sm tracking-tight mb-1">Add Media</span>
+                      <span className="text-sm font-bold opacity-60">Choose a photo or video (Max 50MB)</span>
                     </div>
                   </button>
                 )}
@@ -202,7 +206,7 @@ export function StoryBubbleList() {
                   type="file"
                   ref={fileInputRef}
                   className="hidden"
-                  accept="image/*"
+                  accept="image/*,video/*"
                   disabled={uploading || createStoryMutation.isPending}
                   onChange={(e) => {
                     const file = e.target.files?.[0];

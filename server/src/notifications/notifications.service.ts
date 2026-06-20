@@ -48,7 +48,7 @@ export class NotificationsService {
 
     const { data, error } = await client
       .from('notifications')
-      .select('*, sender:users(*), post:posts(*)')
+      .select('*, sender:users!notifications_sender_id_fkey(*), post:posts(*)')
       .eq('recipient_id', userId)
       .order('created_at', { ascending: false })
       .limit(50);
