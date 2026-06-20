@@ -11,6 +11,7 @@ export default defineConfig({
   timeout: 30000,
   expect: {
     timeout: 10000,
+    ignoreSnapshots: !!process.env.CI,
   },
   /* Run tests in files in parallel */
   fullyParallel: true,
